@@ -1,0 +1,9 @@
+<p>{{$question->question}}</p>
+<p>{{$question->option1}}</p>
+<p>{{$question->option2}}</p>
+<p>{{$question->option3}}</p>
+<p>{{$question->option4}}</p>
+<p>{{$question->option5}}</p>
+<p>{{$question->answer}}</p>
+<p>{{$question->created_at}}</p>
+<p>{{$question->updated_at}}</p>
