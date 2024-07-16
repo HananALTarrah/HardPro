@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use App\Models\Test;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,7 +10,7 @@ class Question extends Model
     use HasFactory;
    
     protected $fillable = [
-        // 'test_id',
+        'test_id',
         'question',
         'option1',
         'option2',
@@ -19,4 +19,8 @@ class Question extends Model
         'option5',
         'answer'
     ];
+    public function test()
+    {
+        return $this->belongsTo(Test::class);
+    }
 }

@@ -21,11 +21,16 @@ Route::group(['namespace'=>'Admin','middelware'=>'guest:admin'],function(){
   Route::group(['prefix' => 'tests'], function () {
       Route::get('/',[TestsController::class,'index']) -> name('admin.tests');
       Route::get('create',[TestsController::class,'create']) -> name('admin.tests.create');
-      Route::post('store',[TestsController::class,'store']) -> name('admin.tests.store');
+      // Route::post('store',[TestsController::class,'store']) -> name('admin.tests.store');
       Route::get('edit/{id}','TestsController@edit') -> name('admin.tests.edit');
       Route::post('update/{id}','TestsController@update') -> name('admin.tests.update');
       Route::get('delete/{id}','TestsController@destroy') -> name('admin.tests.delete');
   });
+  Route::middleware('auth:admin')->group(function () {
+    Route::post('/store', [TestController::class, 'store']);
+});
+
+
 
 // الامتحانات الوطنية
 Route::group(['prefix' => 'nationalexams'], function () {
@@ -46,5 +51,11 @@ Route::group(['prefix' => 'nationalexams'], function () {
   Route::post('/questions/store',[QuestionsController::class,'store']);
   Route::put('/questions/update/{question}',[QuestionsController::class,'update']);
   Route::delete('/questions/delete/{question}',[QuestionsController::class,'destroy']);
-
+  Route::get('/questions/{id}', [QuestionsController::class, 'show']);
+  Route::get('/tests/{test_id}', [QuestionsController::class, 'getQuestionsByTestId']);
   
+
+  // الاختبارات
+  Route::get('/tests', [TestsController::class, 'index']);
+  Route::delete('/tests/delete/{id}', [TestsController::class, 'destroy']);
+  Route::post('/tests/store',[TestsController::class,'store']);

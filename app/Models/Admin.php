@@ -6,31 +6,25 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 // لأجل اي مودل بيعمل لوغإن و ريجستر هيإكستند من الأوثينتيكيتبل وليس من المودل
 // class Admin extends Model
 class Admin extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasApiTokens, Notifiable;
 
     protected $table='admins';
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        // الصورة يمكن تكون نلل و بس يفوت الدير عالبروفايل تبعو بحط صورة
-        'photo',
-        'created_at',
-        'updated_at'
+        'name', 'email', 'password',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'password', 'remember_token',
     ];
+
+    public function tests()
+    {
+        return $this->hasMany(Test::class, 'admin_id');
+    }
 }

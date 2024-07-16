@@ -11,12 +11,19 @@ class Test extends Model
 
     protected $table='tests';
     protected $fillable = [
-        'name',
-        'created_at',
-        'updated_at'
+        'name', 'id_admin',
     ];
 
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class, 'admin_id');
+    }
+
+    public function questions()
+    {
+        return $this->hasMany(Question::class);
+    }
     // أي ريكويست هأعمل فيه سيليكت مش هترجع معايا
-    protected $hidden = [];
+    // protected $hidden = [];
 
 }

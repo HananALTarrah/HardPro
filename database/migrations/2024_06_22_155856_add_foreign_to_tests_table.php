@@ -12,8 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('tests', function (Blueprint $table) {
-            $table->foreignId('admin_id')->references('id')->on('admins')->cascadeOnDelete()->cascadeOnUpdate();
-        });
+            if (!Schema::hasColumn('tests', 'admin_id')) {
+                $table->unsignedBigInteger('admin_id');
+                $table->foreign('admin_id')->references('id')->on('admins')->onDelete('cascade');
+            }        });
     }
 
     /**
@@ -22,6 +24,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('tests', function (Blueprint $table) {
+            $table->dropForeign(['admin_id']);
             $table->dropColumn('admin_id');
         });
     }

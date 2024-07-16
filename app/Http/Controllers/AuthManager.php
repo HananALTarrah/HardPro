@@ -36,6 +36,7 @@ class AuthManager extends Controller
     {
         $validator = Validator::make($request -> all(),[
             'name' => 'required|string|max:255',
+            'universityn' => 'required|integer|max:8|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
         ]);
@@ -52,6 +53,40 @@ class AuthManager extends Controller
         return response()->json(['access_token'=>$token,'token_type'=>'Bearer',]);
     }
 
+    public function updateUser(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'universityn' => 'required|integer|max:8|unique:users',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8'
+        ]);
+
+        $user = User::findOrFail($id);
+        $user->name = $request->input('name');
+        $user->universityn = $request->input('universityn');
+        $user->email = $request->input('email');
+        $user->password = $request->input('password');
+        $user->save();
+
+        return response()->json(['message' => 'information updated successfully','user' => $user]);
+    }
+
+
+    public function search(Request $request)
+    {
+        $attribute = $request->input('attribute');
+        $value = $request->input('value');
+
+        $user = User::where($attribute, $value)->first();
+
+        if ($user) {
+            return response()->json($user);
+        } else {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+    }
+    
     function logout(Request $request)
     {
         echo($request->user());

@@ -27,6 +27,7 @@ class QuestionsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request -> all(),[
+            'test_id' => 'required|exists:tests,id',
             'question' => 'required',
             'option1'  => 'required',
             'option2'  => 'required',
@@ -39,6 +40,7 @@ class QuestionsController extends Controller
             return response()->json(['error'=>$validator->messages()], 400);
         }
         $question = new Question();
+        $question->test_id = $request->test_id;
         $question->question = $request->question;
         $question->option1 = $request->option1;
         $question->option2 = $request->option2;
@@ -84,5 +86,36 @@ class QuestionsController extends Controller
         $question->delete();
 
         return response()->json(['message' => 'Question deleted successfully!']);
+    }
+
+    public function show($id)
+    {
+        $question = Question::find($id);
+
+        if (!$question) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Record not found.'
+            ], 404);
+        }
+
+        return response()->json([
+            'data' => $question
+        ]);
+    }
+    public function getQuestionsByTestId($test_id)
+    {
+        // الحصول على الأسئلة بناءً على test_id
+        $questions = Question::where('test_id', $test_id)->get();
+
+        // التحقق من وجود الأسئلة
+        if ($questions->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No questions found for this test ID.'
+            ], 404);
+        }
+
+        return response()->json($questions);
     }
 }
