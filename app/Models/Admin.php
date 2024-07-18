@@ -10,9 +10,11 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 // لأجل اي مودل بيعمل لوغإن و ريجستر هيإكستند من الأوثينتيكيتبل وليس من المودل
 // class Admin extends Model
+
+
 class Admin extends Authenticatable
 {
-    use HasApiTokens, Notifiable;
+    use HasApiTokens, Notifiable, HasFactory;
 
     protected $table='admins';
     protected $fillable = [

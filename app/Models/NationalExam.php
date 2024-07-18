@@ -13,7 +13,8 @@ class NationalExam extends Model
     
     protected $fillable = [
         'name',
-        'path' 
+        'path',
+       'admin_id' 
     ];
     
 

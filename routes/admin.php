@@ -32,30 +32,25 @@ Route::group(['namespace'=>'Admin','middelware'=>'guest:admin'],function(){
 
 
 
-// الامتحانات الوطنية
-Route::group(['prefix' => 'nationalexams'], function () {
-      Route::get('/','NationalExamsController@index') -> name('admin.nationalexams');
-      Route::get('create','NationalExamsController@create') -> name('admin.nationalexams.create');
-      Route::post('store','NationalExamsController@store') -> name('admin.nationalexams.store');
-      Route::get('{nationalexam}', 'NationalExamsController@show') ->name('admin.nationalexams.show');
-      Route::get('{nationalexam}/edit','NationalExamsController@edit') -> name('admin.nationalexams.edit');
-      Route::put('{nationalexam}','NationalExamsController@update') -> name('admin.nationalexams.update');
-      Route::delete('{nationalexam}','NationalExamsController@destroy') -> name('admin.nationalexams.destroy');
-      Route::delete('{nationalexam}','NationalExamsController@forceDelete') -> name('admin.nationalexams.forceDelete');
+// الامتحانات الوطنية        OK
+Route::get('/nationalexams',[NationalExamsController::class,'index']);//OK
+Route::post('/nationalexams/store',[NationalExamsController::class,'store']);//OK
+Route::delete('/nationalexams/delete/{id}',[NationalExamsController::class,'destroy']);//OK
 
-  });
+// cookies
 
+// أسئلة امتحانية          OK
+  Route::get('/questions',[QuestionsController::class,'index']);//you don't need it
+  Route::post('/questions/{test_id}',[QuestionsController::class,'store']);//OK
+  Route::get('/questions/{id}', [QuestionsController::class, 'show']);//OK
+  Route::post('/questions/update/{id}',[QuestionsController::class,'update']);//OK
+  Route::delete('/questions/delete/{question}',[QuestionsController::class,'destroy']);//OK
+  Route::get('/questions/{id}', [QuestionsController::class, 'show']);//OK
+  Route::get('/tests/{test_id}', [QuestionsController::class, 'getQuestionsByTestId']);//OK
+// مسار البحث عن الأسئلة بناءً على test_id و قيمة حقل question
+Route::post('/questions/search/{test_id}', [QuestionsController::class, 'searchByQuestion']);//OK
 
-// أسئلة امتحانية
-  Route::get('/questions',[QuestionsController::class,'index']);
-  Route::post('/questions/store',[QuestionsController::class,'store']);
-  Route::put('/questions/update/{question}',[QuestionsController::class,'update']);
-  Route::delete('/questions/delete/{question}',[QuestionsController::class,'destroy']);
-  Route::get('/questions/{id}', [QuestionsController::class, 'show']);
-  Route::get('/tests/{test_id}', [QuestionsController::class, 'getQuestionsByTestId']);
-  
-
-  // الاختبارات
-  Route::get('/tests', [TestsController::class, 'index']);
-  Route::delete('/tests/delete/{id}', [TestsController::class, 'destroy']);
-  Route::post('/tests/store',[TestsController::class,'store']);
+  // الاختبارات             OK
+  Route::get('/tests', [TestsController::class, 'index']);//OK
+  Route::delete('/tests/delete/{id}', [TestsController::class, 'destroy']);//OK
+  Route::post('/tests/store',[TestsController::class,'store']);//OK

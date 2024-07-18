@@ -11,7 +11,7 @@ class Test extends Model
 
     protected $table='tests';
     protected $fillable = [
-        'name', 'id_admin',
+        'name', 'admin_id',
     ];
 
     public function admin()

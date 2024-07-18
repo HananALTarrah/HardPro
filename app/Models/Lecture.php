@@ -12,10 +12,8 @@ class Lecture extends Model
     use HasFactory;
 
     protected $fillable = [
-        'lecture_title',
-        'lecture_file',
-        
-    ];
+        'lecture_title','lecture_file','admin_id'
+     ];
 
     //  لجلب المادة الخاصة بمحاضرة معينة
     // one-to-many

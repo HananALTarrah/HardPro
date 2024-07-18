@@ -24,10 +24,9 @@ class QuestionsController extends Controller
     }
 
     
-    public function store(Request $request)
+    public function store(Request $request, $test_id)
     {
         $validator = Validator::make($request -> all(),[
-            'test_id' => 'required|exists:tests,id',
             'question' => 'required',
             'option1'  => 'required',
             'option2'  => 'required',
@@ -40,6 +39,7 @@ class QuestionsController extends Controller
             return response()->json(['error'=>$validator->messages()], 400);
         }
         $question = new Question();
+        $question->test_id = $test_id;
         $question->test_id = $request->test_id;
         $question->question = $request->question;
         $question->option1 = $request->option1;
@@ -117,5 +117,31 @@ class QuestionsController extends Controller
         }
 
         return response()->json($questions);
+    }
+
+    public function searchByQuestion(Request $request, $test_id)
+    {
+        // التحقق من أن البارامتر question تم تمريره في الطلب
+        $request->validate([
+            'question' => 'required|string',
+        ]);
+
+        // البحث عن جميع السجلات التي تطابق قيمة الحقل question و test_id
+        $questions = Question::where('test_id', $test_id)
+                              ->where('question', 'LIKE', '%' . $request->question . '%')
+                              ->get();
+
+       if ($questions->isEmpty()) {
+           return response()->json([
+             'success' => false,
+             'message' => 'Record not found.'
+             ], 404);
+        }
+                    
+        // إعادة النتائج كاستجابة JSON
+        return response()->json([
+            'success' => true,
+            'data' => $questions
+             ]);
     }
 }

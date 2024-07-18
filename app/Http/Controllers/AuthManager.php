@@ -36,7 +36,7 @@ class AuthManager extends Controller
     {
         $validator = Validator::make($request -> all(),[
             'name' => 'required|string|max:255',
-            'universityn' => 'required|integer|max:8|unique:users',
+            'universityn' => 'required|string|max:8|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
         ]);
@@ -47,6 +47,7 @@ class AuthManager extends Controller
         $user = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
+            'universityn' => $request->input('universityn'),
             'password' => Hash::make($request->input('password')),
         ]);
         $token = $user->createToken('auth_token')->plainTextToken;
